@@ -10,7 +10,7 @@ export default function PostForm() {
         body: ''
     })
 
-    const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
+    const [createPost] = useMutation(CREATE_POST_MUTATION, {
         variables: values,
         update(proxy, result) {
             const data = proxy.readQuery({
@@ -34,20 +34,22 @@ export default function PostForm() {
     }
 
     return (
-        <Form onSubmit={handleSubmit}>
-            <h2>Create a post:</h2>
-            <Form.Field>
-                <Form.Input
-                    placeholder="Publish a new post"
-                    name="body"
-                    onChange={onChange}
-                    value={values.body}
-                />
-                <Button type="submit" color="teal">
-                    Publish
+        <>
+            <Form onSubmit={handleSubmit}>
+                <h2>Create a post:</h2>
+                <Form.Field>
+                    <Form.Input
+                        placeholder="Publish a new post"
+                        name="body"
+                        onChange={onChange}
+                        value={values.body}
+                    />
+                    <Button type="submit" color="teal">
+                        Publish
                 </Button>
-            </Form.Field>
-        </Form>
+                </Form.Field>
+            </Form>
+        </>
     )
 }
 
