@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
-import { Button, Card, Icon, Image } from 'semantic-ui-react'
+import { Button, Card, Image } from 'semantic-ui-react'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../context/auth'
 import LikeButton from './LikeButton'
+import DeleteButton from './DeleteButton'
 
 const PostCard = ({ post: { body, createdAt, id, username, likeCount, commentCount, likes, comments } }) => {
     const { user } = useContext(AuthContext);
@@ -14,7 +15,7 @@ const PostCard = ({ post: { body, createdAt, id, username, likeCount, commentCou
 
     return (
         <Card fluid>
-            <Card.Content>
+            <Card.Content as={Link} to={`/posts/${id}`}>
                 <Image
                     floated='right'
                     size='mini'
@@ -25,12 +26,12 @@ const PostCard = ({ post: { body, createdAt, id, username, likeCount, commentCou
                 <Card.Description>{body}</Card.Description>
             </Card.Content>
             <Card.Content extra>
-                <LikeButton user={user} post={{id, likes, likeCount}}/>
+                <LikeButton user={user} post={{ id, likes, likeCount }} />
                 <Button
                     as={Link}
                     to={`/posts/${id}`}
                     onClick={commentPost}
-                    basic={comments.length > 0 ? false : true}
+                    basic={false}
                     color='teal'
                     icon='comment'
                     label={{
@@ -41,11 +42,7 @@ const PostCard = ({ post: { body, createdAt, id, username, likeCount, commentCou
                         content: commentCount,
                     }}
                 />
-                {user && user.username === username && (
-                    <Button as="div" color="red" floated="right" onClick={() => console.log('delete')}>
-                        <Icon style={{margin: 0}} name="trash" />
-                    </Button>
-                )}
+                {user && user.username === username && <DeleteButton postId={id} />}
             </Card.Content>
         </Card>
     )
