@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from 'semantic-ui-react'
+import { Button, Popup } from 'semantic-ui-react'
 import { gql, useMutation } from '@apollo/react-hooks'
 
 export default function LikeButton({ post: { id, likeCount, likes }, user }) {
@@ -16,13 +16,17 @@ export default function LikeButton({ post: { id, likeCount, likes }, user }) {
     })
 
     return (
-        <Button
-            onClick={likePost}
-            basic={!liked ? true : false}
-            color='red'
-            icon='heart'
-            label={{ basic: true, color: 'red', pointing: 'left', content: likeCount }}
-        />
+        <Popup content={likes.map(like => (
+            <p>{like.username}</p>
+        ))} trigger={
+            <Button
+                onClick={user ? likePost : () => console.log('user not logged in')}
+                basic={!liked ? true : false}
+                color='red'
+                icon='heart'
+                label={{ basic: true, color: 'red', pointing: 'left', content: likeCount }}
+            />
+        } />
     )
 }
 
