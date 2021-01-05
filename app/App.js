@@ -1,25 +1,19 @@
-import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  StatusBar,
-  Text
-} from 'react-native';
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { StatusBar, SafeAreaView } from 'react-native';
+import Routes from './routes/Route';
+import { ThemeProvider } from 'react-native-magnus';
 
-const App = () => {
+export default function App() {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-          <View>
-            <Text>This is my app</Text>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <NavigationContainer>
+      <ThemeProvider>
+        <SafeAreaView style={{ flex: 1 }}>
+          <StatusBar barStyle="light-content" backgroundColor="#312e38" />
+          <Routes />
+        </SafeAreaView>
+      </ThemeProvider>
+    </NavigationContainer>
   );
-};
-
-export default App;
+}
