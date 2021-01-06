@@ -1,14 +1,23 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native';
 import { Div, Text, Button, Input } from 'react-native-magnus';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignUp({ navigation }) {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
 
+    useEffect(() => {
+        const getToken = async () => {
+            const token = await AsyncStorage.getItem("token")
+            console.log(token)
+        }
+        getToken()
+    }, [])
+
     function handleSubmit() {
-        console.log(values)
+        console.log('values')
     }
 
     return (
@@ -31,10 +40,10 @@ export default function SignUp({ navigation }) {
                 <Div mt="xl">
                     <Text fontSize="md" mb="sm">E-mail</Text>
                     <Input
-                        defaultValue={email}
                         rounded="sm"
                         bg="gray100"
                         borderWidth={0}
+                        defaultValue={email}
                         onChangeText={text => setEmail(text)}
                     />
                 </Div>

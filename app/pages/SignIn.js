@@ -1,20 +1,49 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native';
 import { Div, Text, Button, Input, Image } from 'react-native-magnus';
+import { gql, useMutation } from '@apollo/client';
+import { AuthContext } from '../hooks/auth'
 
 const LOGO_URL = "https://i.ibb.co/mHcK0gG/Screenshot-1.png";
 
 export default function SignIn({ navigation }) {
+    const context = useContext(AuthContext);
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [errors, setErrors] = useState({})
+
+    const values = {
+        username: username,
+        password: password
+    }
+
+    const [loginUser, { loading }] = useMutation(LOGIN_USER, {
+        update(_, { data: { login: userData } }) {
+            context.login(userData)
+            navigation.push('home')
+        },
+        onError(err) {
+            setErrors(err.graphQLErrors[0].extensions.exception.errors);
+        },
+        variables: values
+    })
+
+    function loginUserCallback() {
+        loginUser()
+    }
+
     return (
         <SafeAreaView>
             <Div px="md" mx="md" mt="3xl">
                 <Image mt="xl" resizeMode="contain" w="100%" h={100} justifyContent="center" source={{ uri: LOGO_URL }} />
                 <Div mt="md" pt="2xl">
-                    <Text fontSize="md" mb="sm">Email / Username</Text>
+                    <Text fontSize="md" mb="sm">Username</Text>
                     <Input
                         rounded="sm"
                         bg="gray100"
                         borderWidth={0}
+                        defaultValue={username}
+                        onChangeText={text => setUsername(text)}
                     />
                 </Div>
                 <Div mt="xl">
@@ -24,9 +53,11 @@ export default function SignIn({ navigation }) {
                         secureTextEntry
                         rounded="sm"
                         borderWidth={0}
+                        defaultValue={password}
+                        onChangeText={text => setPassword(text)}
                     />
                 </Div>
-                <Button block bg="teal500" py="lg" mt="md">Login</Button>
+                <Button onPress={loginUserCallback} block bg="teal500" py="lg" mt="md">Login</Button>
 
                 <Div justifyContent="center" alignItems="center" flexDir="row" mt="lg">
                     <Text fontSize="md">Don't have an account?</Text>
@@ -36,3 +67,17 @@ export default function SignIn({ navigation }) {
         </SafeAreaView>
     )
 }
+
+const LOGIN_USER = gql`
+    mutation login(
+        $username: String!
+        $password: String!
+    ){
+        login(
+            username: $username
+            password: $password
+        ){
+            id email username createdAt token
+        }
+    }
+`;
