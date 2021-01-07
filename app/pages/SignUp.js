@@ -1,27 +1,55 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native';
-import { Div, Text, Button, Input } from 'react-native-magnus';
+import { Div, Text, Button, Input, Overlay } from 'react-native-magnus';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../hooks/auth'
+import { gql, useMutation } from '@apollo/client';
 
 export default function SignUp({ navigation }) {
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
+    const context = useContext(AuthContext);
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [errors, setErrors] = useState({})
+    const [overlayVisible, setOverlayVisible] = useState(false);
 
-    useEffect(() => {
-        const getToken = async () => {
-            const token = await AsyncStorage.getItem("token")
-            console.log(token)
-        }
-        getToken()
-    }, [])
+    const values = {
+        username: username,
+        password: password,
+        email: email,
+        confirmPassword: confirmPassword
+    }
+
+    const [registerUser] = useMutation(REGISTER_USER, {
+        update(_, { data: { register: userData } }) {
+            context.login(userData)
+            navigation.push('home')
+        },
+        onError(err) {
+            setErrors(err.graphQLErrors[0].extensions.exception.errors);
+            console.log(errors)
+            setOverlayVisible(true)
+        },
+        variables: values
+    })
 
     function handleSubmit() {
-        console.log('values')
+        registerUser()
     }
 
     return (
         <SafeAreaView>
+            {errors && (
+                <Overlay visible={overlayVisible} p="xl">
+                    {errors.username && <Text mt="md">{errors.username}</Text>}
+                    {errors.general && <Text mt="md">{errors.general}</Text>}
+                    {errors.email && <Text mt="md">{errors.email}</Text>}
+                    {errors.password && <Text mt="md">{errors.password}</Text>}
+                    {errors.confirmPassword && <Text mt="md">{errors.confirmPassword}</Text>}
+                    <Button onPress={() => setOverlayVisible(false)} block bg="teal500" py="lg" mt="md">Close</Button>
+                </Overlay>
+            )}
             <Div px="md" mx="md" mt="xl">
                 <Icon onPress={() => navigation.goBack()} name="rocket" size={30} color="#900" />
             </Div>
@@ -30,11 +58,11 @@ export default function SignUp({ navigation }) {
                 <Div mt="md" pt="2xl">
                     <Text fontSize="md" mb="sm">Username</Text>
                     <Input
-                        defaultValue={name}
+                        defaultValue={username}
                         rounded="sm"
                         bg="gray100"
                         borderWidth={0}
-                        onChangeText={text => setName(text)}
+                        onChangeText={text => setUsername(text)}
                     />
                 </Div>
                 <Div mt="xl">
@@ -54,6 +82,8 @@ export default function SignUp({ navigation }) {
                         secureTextEntry
                         rounded="sm"
                         borderWidth={0}
+                        defaultValue={password}
+                        onChangeText={text => setPassword(text)}
                     />
                 </Div>
                 <Div mt="xl">
@@ -63,6 +93,8 @@ export default function SignUp({ navigation }) {
                         secureTextEntry
                         rounded="sm"
                         borderWidth={0}
+                        defaultValue={confirmPassword}
+                        onChangeText={text => setConfirmPassword(text)}
                     />
                 </Div>
                 <Button onPress={handleSubmit} block bg="teal500" py="lg" mt="2xl">Register</Button>
@@ -70,3 +102,23 @@ export default function SignUp({ navigation }) {
         </SafeAreaView>
     )
 }
+
+const REGISTER_USER = gql`
+    mutation register(
+        $username: String!
+        $email: String!
+        $password: String!
+        $confirmPassword: String!
+    ){
+        register(
+            registerInput: {
+                username: $username
+                email: $email
+                password: $password
+                confirmPassword: $confirmPassword
+            }
+        ){
+            id email username createdAt token
+        }
+    }
+`;

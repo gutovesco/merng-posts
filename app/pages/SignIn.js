@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { SafeAreaView } from 'react-native';
-import { Div, Text, Button, Input, Image } from 'react-native-magnus';
+import { Div, Text, Button, Input, Image, Overlay } from 'react-native-magnus';
 import { gql, useMutation } from '@apollo/client';
 import { AuthContext } from '../hooks/auth'
 
@@ -11,19 +11,22 @@ export default function SignIn({ navigation }) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [errors, setErrors] = useState({})
+    const [overlayVisible, setOverlayVisible] = useState(false);
 
     const values = {
         username: username,
         password: password
     }
 
-    const [loginUser, { loading }] = useMutation(LOGIN_USER, {
+    const [loginUser] = useMutation(LOGIN_USER, {
         update(_, { data: { login: userData } }) {
             context.login(userData)
             navigation.push('home')
         },
         onError(err) {
             setErrors(err.graphQLErrors[0].extensions.exception.errors);
+            console.log(errors)
+            setOverlayVisible(true)
         },
         variables: values
     })
@@ -34,6 +37,14 @@ export default function SignIn({ navigation }) {
 
     return (
         <SafeAreaView>
+            {errors && (
+                <Overlay visible={overlayVisible} p="xl">
+                    {errors.username && <Text mt="md">{errors.username}</Text>}
+                    {errors.password && <Text mt="md">{errors.password}</Text>}
+                    {errors.general && <Text mt="md">{errors.general}</Text>}
+                    <Button onPress={() => setOverlayVisible(false)} block bg="teal500" py="lg" mt="md">Close</Button>
+                </Overlay>
+            )}
             <Div px="md" mx="md" mt="3xl">
                 <Image mt="xl" resizeMode="contain" w="100%" h={100} justifyContent="center" source={{ uri: LOGO_URL }} />
                 <Div mt="md" pt="2xl">
