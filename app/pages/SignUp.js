@@ -51,7 +51,7 @@ export default function SignUp({ navigation }) {
                 </Overlay>
             )}
             <Div px="md" mx="md" mt="xl">
-                <Icon onPress={() => navigation.goBack()} name="rocket" size={30} color="#900" />
+                <Icon onPress={() => navigation.goBack()} name="arrow-left" size={30} color="#900" />
             </Div>
 
             <Div px="md" mx="md" mt="xl">
