@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import { Text, Button, Div, Image, Avatar } from 'react-native-magnus'
 import LikeButton from '../components/LikedButton'
 import { AuthContext } from '../hooks/auth'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 export default function HomeCard({ item }) {
     const { user } = useContext(AuthContext);
@@ -30,10 +31,10 @@ export default function HomeCard({ item }) {
                     <Avatar bg="red300" size={40} color="red800">{(item.username).substr(0, 1).toUpperCase()}</Avatar>
                     <Div>
                         <Text fontSize={15} ml="lg">{item.username}</Text>
-                        <Text ml="lg" color="gray500" fontSize={12}>{item.createdAt}</Text>
+                        <Text ml="lg" color="gray500" fontSize={12}>{formatDistanceToNow(new Date(item.createdAt)) + " ago"}</Text>
                     </Div>
                 </Div>
-                <Text mt="sm">{item.body}</Text>
+                <Text ml="xs" mt="sm">{item.body}</Text>
                 <Div row alignItems="center" mt="lg">
                     <LikeButton user={user} post={item} />
                     <Button bg="gray100" borderColor="#e6e6e6" borderWidth={1} rounded="circle" size={50}>
