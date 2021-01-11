@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
 import Home from '../pages/Home';
+import CreatePost from '../pages/CreatePost';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const AppRoutes = () => {
             <Stack.Screen name="signin" component={SignIn} />
             <Stack.Screen name="signup" component={SignUp} />
             <Stack.Screen name="home" component={Home} />
+            <Stack.Screen name="createPost" component={CreatePost}/>
         </Stack.Navigator>
     )
 }

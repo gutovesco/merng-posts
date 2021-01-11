@@ -5,7 +5,7 @@ import { gql, useQuery } from '@apollo/client';
 import HomeCard from '../components/HomeCard';
 import HeaderComponent from '../components/Header'
 
-export default function Home() {
+export default function Home({ navigation }) {
     const { data } = useQuery(FETCH_POSTS_QUERY);
 
     return (
@@ -15,7 +15,7 @@ export default function Home() {
                 <Text fontWeight="bold" mt="2xl" mb="2xl" ml="lg" fontSize={30}>
                     New posts
                 </Text>
-                <Button style={{ marginBottom: 5 }} alignSelf="flex-end" bg="white" fontWeight="bold" mb="xl" fontSize={15} color="blue400">
+                <Button onPress={() => navigation.push("createPost")} style={{ marginBottom: 5 }} alignSelf="flex-end" bg="white" fontWeight="bold" mb="xl" fontSize={15} color="blue400">
                     Create new post
                 </Button>
             </Div>
