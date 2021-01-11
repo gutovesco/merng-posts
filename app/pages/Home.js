@@ -1,21 +1,22 @@
-import React from 'react'
-import { SafeAreaView, FlatList } from 'react-native'
-import { Text, Button, Div } from 'react-native-magnus'
+/* eslint-disable prettier/prettier */
+import React from 'react';
+import { SafeAreaView, FlatList } from 'react-native';
+import { Text, Button, Div } from 'react-native-magnus';
 import { gql, useQuery } from '@apollo/client';
 import HomeCard from '../components/HomeCard';
-import HeaderComponent from '../components/Header'
+import HeaderComponent from '../components/Header';
 
 export default function Home({ navigation }) {
     const { data } = useQuery(FETCH_POSTS_QUERY);
 
     return (
         <SafeAreaView>
-            <HeaderComponent />
+            <HeaderComponent isHome={true} navigation={navigation} />
             <Div row alignItems="center">
-                <Text fontWeight="bold" mt="2xl" mb="2xl" ml="lg" fontSize={30}>
+                <Text fontWeight="bold" mt="xl" mb="xl" ml="lg" fontSize={30}>
                     New posts
                 </Text>
-                <Button onPress={() => navigation.push("createPost")} style={{ marginBottom: 5 }} alignSelf="flex-end" bg="white" fontWeight="bold" mb="xl" fontSize={15} color="blue400">
+                <Button onPress={() => navigation.push('createPost')} alignSelf="flex-end" bg="white" fontWeight="bold" mb="xl" fontSize={15} color="blue400">
                     Create new post
                 </Button>
             </Div>
@@ -25,12 +26,12 @@ export default function Home({ navigation }) {
                 renderItem={({ item }) => {
                     return (
                         <HomeCard item={item} />
-                    )
+                    );
                 }}
                 keyExtractor={(post) => `${post.id}`}
             />
         </SafeAreaView >
-    )
+    );
 }
 
 export const FETCH_POSTS_QUERY = gql`
@@ -51,3 +52,4 @@ export const FETCH_POSTS_QUERY = gql`
 }
 }
 `
+;
