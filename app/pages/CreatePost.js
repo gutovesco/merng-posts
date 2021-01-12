@@ -3,7 +3,9 @@
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native';
 import HeaderComponent from '../components/Header';
-import { gql, useMutation } from '@apollo/client';
+import { CREATE_POST_MUTATION } from '../graphql/mutations';
+import { FETCH_POSTS_QUERY } from '../graphql/querry';
+import { useMutation } from '@apollo/client';
 import { Div, Text, Button, Input } from 'react-native-magnus';
 
 export default function CreatePost({ navigation }) {
@@ -14,7 +16,6 @@ export default function CreatePost({ navigation }) {
       body: postBody,
     },
     update(proxy, result) {
-      console.log(result);
       const data = proxy.readQuery({
         query: FETCH_POSTS_QUERY,
       });
@@ -67,47 +68,3 @@ export default function CreatePost({ navigation }) {
     </SafeAreaView>
   );
 }
-
-const CREATE_POST_MUTATION = gql`
-    mutation createPost($body: String!){
-        createPost(body: $body){
-            id
-            body
-            createdAt
-            username
-            likes{
-                id
-                username
-                createdAt
-            }
-            likeCount
-            comments{
-                id
-                body
-                username
-                createdAt
-            }
-            commentCount
-        }
-    }
-`;
-
-export const FETCH_POSTS_QUERY = gql`
-{
-   getPosts{
-    id 
-    body 
-    createdAt 
-    username 
-    likeCount
-    likes{
-       username
-    }
-    commentCount
-    comments{
-       id username createdAt body
-    }
-}
-}
-`
-  ;

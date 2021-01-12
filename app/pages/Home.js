@@ -2,7 +2,8 @@
 import React from 'react';
 import { SafeAreaView, FlatList } from 'react-native';
 import { Text, Button, Div } from 'react-native-magnus';
-import { gql, useQuery } from '@apollo/client';
+import { FETCH_POSTS_QUERY } from '../graphql/querry';
+import { useQuery } from '@apollo/client';
 import HomeCard from '../components/HomeCard';
 import HeaderComponent from '../components/Header';
 
@@ -33,23 +34,3 @@ export default function Home({ navigation }) {
         </SafeAreaView >
     );
 }
-
-export const FETCH_POSTS_QUERY = gql`
-{
-   getPosts{
-    id 
-    body 
-    createdAt 
-    username 
-    likeCount
-    likes{
-       username
-    }
-    commentCount
-    comments{
-       id username createdAt body
-    }
-}
-}
-`
-;

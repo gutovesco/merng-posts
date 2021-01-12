@@ -1,9 +1,11 @@
-import React, { useState, useContext } from 'react'
+/* eslint-disable prettier/prettier */
+import React, { useState, useContext } from 'react';
 import { SafeAreaView } from 'react-native';
 import { Div, Text, Button, Input, Overlay } from 'react-native-magnus';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AuthContext } from '../hooks/auth'
-import { gql, useMutation } from '@apollo/client';
+import { AuthContext } from '../hooks/auth';
+import { REGISTER_USER } from '../graphql/mutations';
+import { useMutation } from '@apollo/client';
 
 export default function SignUp({ navigation }) {
     const context = useContext(AuthContext);
@@ -11,31 +13,30 @@ export default function SignUp({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({});
     const [overlayVisible, setOverlayVisible] = useState(false);
 
     const values = {
         username: username,
         password: password,
         email: email,
-        confirmPassword: confirmPassword
-    }
+        confirmPassword: confirmPassword,
+    };
 
     const [registerUser] = useMutation(REGISTER_USER, {
         update(_, { data: { register: userData } }) {
-            context.login(userData)
-            navigation.push('home')
+            context.login(userData);
+            navigation.push('home');
         },
         onError(err) {
             setErrors(err.graphQLErrors[0].extensions.exception.errors);
-            console.log(errors)
-            setOverlayVisible(true)
+            setOverlayVisible(true);
         },
-        variables: values
-    })
+        variables: values,
+    });
 
     function handleSubmit() {
-        registerUser()
+        registerUser();
     }
 
     return (
@@ -100,25 +101,5 @@ export default function SignUp({ navigation }) {
                 <Button onPress={handleSubmit} block bg="teal500" py="lg" mt="2xl">Register</Button>
             </Div>
         </SafeAreaView>
-    )
+    );
 }
-
-const REGISTER_USER = gql`
-    mutation register(
-        $username: String!
-        $email: String!
-        $password: String!
-        $confirmPassword: String!
-    ){
-        register(
-            registerInput: {
-                username: $username
-                email: $email
-                password: $password
-                confirmPassword: $confirmPassword
-            }
-        ){
-            id email username createdAt token
-        }
-    }
-`;

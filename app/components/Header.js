@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useContext } from 'react';
-import { Text, Button, Div, Header, Image } from 'react-native-magnus';
+import { Text, Button, Div, Header, Image, Avatar } from 'react-native-magnus';
 import { AuthContext } from '../hooks/auth';
 
 export default function HeaderComponent({ navigation, isHome }) {
@@ -18,12 +18,15 @@ export default function HeaderComponent({ navigation, isHome }) {
                     <Text>Exit</Text>
                 </Button>}
             prefix={
-                <Div row alignItems="center">
-                    {!isHome && <Image onMagicTap={() => navigation.goBack()} mr="lg" h={25} w={25} source={{ uri: 'https://cdn.icon-icons.com/icons2/38/PNG/512/back_arrow_5821.png' }} />}
-                    <Button bg="gray200" p="none" onPress={() => navigation.goBack()} rounded="circle">
-                        <Image h={50} w={50} source={{ uri: 'https://images.unsplash.com/photo-1561037404-61cd46aa615b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=100&q=80' }} />
+                <Div row alignItems="center" mt="sm">
+                    {!isHome &&
+                    <Button alignItems="center" bg="white" onPress={() => navigation.goBack()}>
+                        <Image mr="lg" h={25} w={25} source={{ uri: 'https://cdn.icon-icons.com/icons2/38/PNG/512/back_arrow_5821.png' }} />
+                    </Button>}
+                    <Button bg="gray200" p="none" rounded="circle">
+                        <Avatar bg="red300" size={40} color="red800">{context.user ? (context.user.username).substr(0, 1).toUpperCase() : ''}</Avatar>
                     </Button>
-                    <Text fontSize={17} ml="lg">{context && context.user ? context.user.username : ''}</Text>
+                    <Text fontSize={17} pb="md" ml="lg">{context && context.user ? context.user.username : ''}</Text>
                 </Div>}
         />
     );

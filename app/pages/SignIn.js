@@ -2,7 +2,8 @@
 import React, { useState, useContext } from 'react';
 import { SafeAreaView, ScrollView } from 'react-native';
 import { Div, Text, Button, Input, Image, Overlay } from 'react-native-magnus';
-import { gql, useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../graphql/mutations';
+import { useMutation } from '@apollo/client';
 import { AuthContext } from '../hooks/auth';
 
 const LOGO_URL = 'https://i.ibb.co/mHcK0gG/Screenshot-1.png';
@@ -26,7 +27,6 @@ export default function SignIn({ navigation }) {
         },
         onError(err) {
             setErrors(err.graphQLErrors[0].extensions.exception.errors);
-            console.log(errors);
             setOverlayVisible(true);
         },
         variables: values,
@@ -83,16 +83,3 @@ export default function SignIn({ navigation }) {
     );
 }
 
-const LOGIN_USER = gql`
-    mutation login(
-        $username: String!
-        $password: String!
-    ){
-        login(
-            username: $username
-            password: $password
-        ){
-            id email username createdAt token
-        }
-    }
-`;
