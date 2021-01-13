@@ -17,7 +17,7 @@ export default function Home({ navigation }) {
                 <Text fontWeight="bold" mt="xl" mb="xl" ml="lg" fontSize={30}>
                     New posts
                 </Text>
-                <Button onPress={() => navigation.push('createPost')} alignSelf="flex-end" bg="white" fontWeight="bold" mb="xl" fontSize={15} color="blue400">
+                <Button underlayColor="white" onPress={() => navigation.push('createPost')} alignSelf="flex-end" bg="white" fontWeight="bold" mb="xl" fontSize={15} color="blue400">
                     Create new post
                 </Button>
             </Div>
@@ -26,7 +26,7 @@ export default function Home({ navigation }) {
                 data={data ? data.getPosts : []}
                 renderItem={({ item }) => {
                     return (
-                        <HomeCard item={item} />
+                        <HomeCard navigation={navigation} item={item} />
                     );
                 }}
                 keyExtractor={(post) => `${post.id}`}

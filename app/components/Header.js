@@ -20,7 +20,7 @@ export default function HeaderComponent({ navigation, isHome }) {
             prefix={
                 <Div row alignItems="center" mt="sm">
                     {!isHome &&
-                    <Button alignItems="center" bg="white" onPress={() => navigation.goBack()}>
+                    <Button underlayColor="white" alignItems="center" bg="white" onPress={() => navigation.goBack()}>
                         <Image mr="lg" h={25} w={25} source={{ uri: 'https://cdn.icon-icons.com/icons2/38/PNG/512/back_arrow_5821.png' }} />
                     </Button>}
                     <Button bg="gray200" p="none" rounded="circle">

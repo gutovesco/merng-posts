@@ -45,7 +45,7 @@ export default function DeleteButton({ post: { id, callback, commentId } }) {
                 </Div>
             </Overlay>
             <Div position="absolute" mr="sm" style={{ right: 0 }}>
-                <Button onPress={() => setOverlayVisible(true)} bg="white" rounded="circle">
+                <Button underlayColor="white" onPress={() => setOverlayVisible(true)} bg="white" rounded="circle">
                     <Image h={35} w={35} source={{ uri: 'https://cdn.icon-icons.com/icons2/1380/PNG/512/vcsconflicting_93497.png' }} />
                 </Button>
             </Div>

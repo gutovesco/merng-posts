@@ -23,13 +23,14 @@ export default function LikedButton({ post: { id, likeCount, likes }, user }) {
     return (
         <Button
             onPress={() => user ? likePost() : () => console.log('user not logged in')}
-            bg="gray100"
+            bg="white"
             borderColor="#e6e6e6"
             borderWidth={1}
             mr="md"
             rounded="circle"
             size={50}
-            color="red800">
+            color="red800"
+            underlayColor="white">
             <Image h={23} w={23} source={{ uri: liked ? likedURL : unlikedURL }} />
         </Button>
     );
