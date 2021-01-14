@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
-import { Button, Image } from 'react-native-magnus';
+import { Button, Div, Image, Text } from 'react-native-magnus';
 import { LIKE_POST_MUTATION } from '../graphql/mutations';
 import { useMutation } from '@apollo/client';
 
 const unlikedURL = 'https://cdn.icon-icons.com/icons2/38/PNG/512/like_favorite_heart_5759.png';
 const likedURL = 'https://cdn.icon-icons.com/icons2/2073/PNG/512/heart_like_love_twitter_icon_127132.png';
 
-export default function LikedButton({ post: { id, likeCount, likes }, user }) {
+export default function LikedButton({ post: { id, likeCount, likes }, user, showLikes = false }) {
     const [liked, setLiked] = useState(false);
 
     useEffect(() => {
@@ -21,18 +21,21 @@ export default function LikedButton({ post: { id, likeCount, likes }, user }) {
     });
 
     return (
-        <Button
-            onPress={() => user ? likePost() : () => console.log('user not logged in')}
-            bg="white"
-            borderColor="#e6e6e6"
-            borderWidth={1}
-            mr="md"
-            rounded="circle"
-            size={50}
-            color="red800"
-            underlayColor="white">
-            <Image h={23} w={23} source={{ uri: liked ? likedURL : unlikedURL }} />
-        </Button>
+        <Div row alignItems="center">
+            <Button
+                onPress={() => user ? likePost() : () => console.log('user not logged in')}
+                bg="white"
+                borderColor="#e6e6e6"
+                borderWidth={1}
+                mr="md"
+                rounded="circle"
+                size={50}
+                color="red800"
+                underlayColor="white">
+                <Image h={23} w={23} source={{ uri: liked ? likedURL : unlikedURL }} />
+            </Button>
+            {showLikes && <Text>{likeCount} {likeCount > 1 ? 'likes' : 'like'}</Text>}
+        </Div>
     );
 }
 

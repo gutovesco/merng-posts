@@ -1,20 +1,18 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import { Div, Text } from 'react-native-magnus';
+import { Div } from 'react-native-magnus';
+import CommentsCard from '../components/CommentsCard';
 import HeaderComponent from '../components/Header';
 
 export default function Comments({ route, navigation }) {
     const { params } = route;
-    console.log(params);
     return (
         <SafeAreaView>
             <HeaderComponent isHome={false} navigation={navigation} />
             <Div px="md" mx="md">
-                <Text fontWeight="bold" mt="2xl" mb="2xl" ml="sm" fontSize={30}>Comments</Text>
+                <CommentsCard item={params.item} />
             </Div>
         </SafeAreaView>
-
-
     );
 }
