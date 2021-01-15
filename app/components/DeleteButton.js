@@ -6,7 +6,7 @@ import { DELETE_POST_MUTATION, DELETE_COMMENT_MUTATION } from '../graphql/mutati
 import { FETCH_POSTS_QUERY } from '../graphql/querry';
 import { useMutation } from '@apollo/client';
 
-export default function DeleteButton({ post: { id, callback, commentId } }) {
+export default function DeleteButton({ id, callback, commentId, postId }) {
     const [overlayVisible, setOverlayVisible] = useState(false);
 
     const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
@@ -31,8 +31,8 @@ export default function DeleteButton({ post: { id, callback, commentId } }) {
             setOverlayVisible(false);
         },
         variables: {
-            postId: id,
-            commentId,
+            postId: postId,
+            commentId: commentId,
         },
     });
     return (

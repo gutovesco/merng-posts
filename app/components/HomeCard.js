@@ -38,10 +38,10 @@ export default function HomeCard({ item, navigation }) {
                 <Text ml="xs" mt="sm">{item.body}</Text>
                 <Div row alignItems="center" mt="lg">
                     <LikeButton user={user} post={item} />
-                    <Button onPress={() => navigation.push('comments', {item: item})} underlayColor="white" bg="gray100" borderColor="#e6e6e6" borderWidth={1} rounded="circle" size={50}>
+                    <Button onPress={() => navigation.push('comments', {item})} underlayColor="white" bg="gray100" borderColor="#e6e6e6" borderWidth={1} rounded="circle" size={50}>
                         <Image h={24} w={24} source={{ uri: 'https://cdn.icon-icons.com/icons2/806/PNG/512/chat-26_icon-icons.com_65943.png' }} />
                     </Button>
-                    {user && user.username === item.username && <DeleteButton post={item}/>}
+                    {user && user.username === item.username && <DeleteButton postId={item.id}/>}
                 </Div>
             </View>
         </View>
