@@ -2,18 +2,18 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-shadow */
 import { useQuery } from '@apollo/client';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { FlatList, SafeAreaView, View } from 'react-native';
-import { Avatar, Button, Div, Input, Text, Skeleton } from 'react-native-magnus';
+import { Avatar, Div, Text, Skeleton } from 'react-native-magnus';
 import { FETCH_POST_QUERY } from '../graphql/querry';
 import { AuthContext } from '../hooks/auth';
 import Comment from './Comment';
 import DeleteButton from './DeleteButton';
 import LikedButton from './LikedButton';
+import PostComment from './PostComment';
 
 export default function CommentsCard({ item, navigation }) {
     const { user } = useContext(AuthContext);
-    const [commentBody, setCommentBody] = useState('');
 
     const { data } = useQuery(FETCH_POST_QUERY, {
         variables: {
@@ -51,7 +51,7 @@ export default function CommentsCard({ item, navigation }) {
         };
 
         function deleteCallback(){
-            navigation.popToTop();
+            navigation.push('home');
         }
 
         commentMarkup =
@@ -84,25 +84,10 @@ export default function CommentsCard({ item, navigation }) {
                         <Div borderBottomWidth={2} borderBottomColor="gray500" mt="lg" mb="lg" />
                         <Div row alignItems="center">
                             <LikedButton showLikes={true} user={user} post={post} />
-                            {user && user.username === username && <DeleteButton postId={id} />}
+                            {user && user.username === username && <DeleteButton callback={deleteCallback} postId={id} />}
                         </Div>
                     </View>
-                    <Div w="93%" pb="xl" mt="xl">
-                        <Text p={4} fontSize={14}>Post a comment</Text>
-                        <Div row alignItems="center" mt="md">
-                            <Input
-                                h={40}
-                                w={270}
-                                defaultValue={commentBody}
-                                onChangeText={(text) => setCommentBody(text)}
-                                placeholder="Write your comment here"
-                                focusBorderColor="blue700"
-                                borderColor="black"
-                                borderWidth={1}
-                            />
-                            <Button bg="teal400" w={80} h={40}>Publish</Button>
-                        </Div>
-                    </Div>
+                    <PostComment navigation={navigation} post={data.getPost}/>
                     <Div w="93%">
                         <FlatList
                             showsVerticalScrollIndicator={false}

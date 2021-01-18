@@ -9,11 +9,12 @@ export default function Comments({ route, navigation }) {
     const { params } = route;
     return (
         <SafeAreaView>
-
+            <ScrollView>
                 <HeaderComponent isHome={false} navigation={navigation} />
                 <Div px="md" mx="md">
                     <CommentsCard navigation={navigation} item={params.item} />
                 </Div>
+            </ScrollView>
         </SafeAreaView>
     );
 }

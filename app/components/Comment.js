@@ -5,7 +5,7 @@ import React from 'react';
 import { Avatar, Button, Div, Image, Text } from 'react-native-magnus';
 import { FETCH_POSTS_QUERY } from '../graphql/querry';
 
-export default function Comment({ item, user, postId }) {
+export default function Comment({ item, user, postId, callback }) {
     const commentId = item.id;
 
     const [deletePostOrMutation] = useMutation(DELETE_COMMENT_MUTATION, {
@@ -24,6 +24,7 @@ export default function Comment({ item, user, postId }) {
                     },
                 });
             }
+            if (callback) {callback();}
         },
         variables: {
             postId,
