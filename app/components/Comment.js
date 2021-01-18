@@ -32,7 +32,7 @@ export default function Comment({ item, user, postId }) {
     });
 
     return (
-        <Div style={{
+        <Div w={350} style={{
             backgroundColor: 'white',
             borderRadius: 15,
             padding: 10,
@@ -46,7 +46,7 @@ export default function Comment({ item, user, postId }) {
             shadowRadius: 2.62,
 
             elevation: 4,
-        }} mt="xl" p={10} key={item.id}>
+        }} mb="sm" p={10} key={item.id}>
             <Div row alignItems="center"  >
                 <Avatar bg="red300" size={50} color="red800">{(item.username).substr(0, 1).toUpperCase()}</Avatar>
                 <Div row justifyContent="space-between">

@@ -8,26 +8,24 @@ import { useMutation } from '@apollo/client';
 
 export default function DeleteButton({ id, callback, commentId, postId }) {
     const [overlayVisible, setOverlayVisible] = useState(false);
+    console.log(commentId);
 
     const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
 
     const [deletePostOrMutation] = useMutation(mutation, {
         update(proxy) {
-            if (!commentId) {
-                const data = proxy.readQuery({
-                    query: FETCH_POSTS_QUERY,
-                });
-                const filteredPosts = data.getPosts.filter(p => p.id !== id);
-                proxy.writeQuery({
-                    query: FETCH_POSTS_QUERY,
-                    data: {
-                        getPosts: [
-                            ...filteredPosts,
-                        ],
-                    },
-                });
-            }
-            if (callback) { callback(); }
+            const data = proxy.readQuery({
+                query: FETCH_POSTS_QUERY,
+            });
+            const filteredPosts = data.getPosts.filter(p => p.id !== id);
+            proxy.writeQuery({
+                query: FETCH_POSTS_QUERY,
+                data: {
+                    getPosts: [
+                        ...filteredPosts,
+                    ],
+                },
+            });
             setOverlayVisible(false);
         },
         variables: {

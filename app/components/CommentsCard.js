@@ -11,18 +11,15 @@ import Comment from './Comment';
 import DeleteButton from './DeleteButton';
 import LikedButton from './LikedButton';
 
-export default function CommentsCard({ item }) {
+export default function CommentsCard({ item, navigation }) {
     const { user } = useContext(AuthContext);
     const [commentBody, setCommentBody] = useState('');
-    console.log(item.id);
 
     const { data } = useQuery(FETCH_POST_QUERY, {
         variables: {
             postId: item.id,
         },
     });
-
-    console.log(data);
 
     let commentMarkup;
 
@@ -53,9 +50,13 @@ export default function CommentsCard({ item }) {
             likes,
         };
 
+        function deleteCallback(){
+            navigation.popToTop();
+        }
+
         commentMarkup =
             <SafeAreaView >
-                <View style={{ alignItems: 'center' }}>
+                <View style={{ alignItems: 'center', marginBottom: 40 }}>
                     <View style={{
                         width: '93%',
                         backgroundColor: 'white',
@@ -86,12 +87,12 @@ export default function CommentsCard({ item }) {
                             {user && user.username === username && <DeleteButton postId={id} />}
                         </Div>
                     </View>
-                    <Div pb="xl" mt="xl">
+                    <Div w="93%" pb="xl" mt="xl">
                         <Text p={4} fontSize={14}>Post a comment</Text>
                         <Div row alignItems="center" mt="md">
                             <Input
                                 h={40}
-                                w={250}
+                                w={270}
                                 defaultValue={commentBody}
                                 onChangeText={(text) => setCommentBody(text)}
                                 placeholder="Write your comment here"
@@ -102,16 +103,18 @@ export default function CommentsCard({ item }) {
                             <Button bg="teal400" w={80} h={40}>Publish</Button>
                         </Div>
                     </Div>
-                    <FlatList
-                        showsVerticalScrollIndicator={false}
-                        data={comments}
-                        renderItem={({ item }) => {
-                            return (
-                                <Comment postId={post.id} user={user} item={item} />
-                            );
-                        }}
-                        keyExtractor={(item) => `${item.id}`}
-                    />
+                    <Div w="93%">
+                        <FlatList
+                            showsVerticalScrollIndicator={false}
+                            data={comments}
+                            renderItem={({ item }) => {
+                                return (
+                                    <Comment postId={post.id} user={user} item={item} />
+                                );
+                            }}
+                            keyExtractor={(item) => `${item.id}`}
+                        />
+                    </Div>
                 </View>
             </SafeAreaView>;
     }
